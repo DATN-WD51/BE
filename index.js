@@ -20,7 +20,6 @@ if (NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-app.get("/", (_, res) => res.json("hello world"));
 app.use("/api", routes);
 
 app.use(jsonValidator);
