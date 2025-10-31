@@ -67,6 +67,9 @@ export const loginService = async (payload) => {
   if (!checkPassword) {
     throwError(400, AUTH_MESSAGES.WRONG_PASSWORD);
   }
+  if (!foundUser.isVerified) {
+    throwError(400, AUTH_MESSAGES.NOT_VERIFIED);
+  }
   const payloadToken = {
     _id: foundUser._id,
     role: foundUser.role,
