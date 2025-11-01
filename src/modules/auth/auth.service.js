@@ -18,15 +18,14 @@ import { comparePassword, generateToken, hashPassword } from "./auth.utils.js";
 import jwt from "jsonwebtoken";
 
 export const registerService = async (payload) => {
-  const { email, phone, password } = payload;
+  const { email, password } = payload;
   const existingUser = await User.findOne({
-    $or: [{ email }, { phone }],
+    $or: [{ email }],
   });
 
   if (existingUser) {
-    const { email: existingEmail, phone: existingPhone } = existingUser;
+    const { email: existingEmail } = existingUser;
     throwIfDuplicate(email, existingEmail, AUTH_MESSAGES.CONFLICT_EMAIL);
-    throwIfDuplicate(phone, existingPhone, AUTH_MESSAGES.CONFLICT_PHONE);
   }
   const hashedPassword = await hashPassword(password);
   const user = await User.create({
