@@ -1,6 +1,6 @@
 import { JWT_ACCESS_SECRET } from "../configs/environment.js";
 import { throwError } from "../utils/create-response.js";
-import { jwt } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 export const authenticate = (secret = JWT_ACCESS_SECRET) => {
   return (req, res, next) => {
