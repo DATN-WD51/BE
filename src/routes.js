@@ -4,12 +4,13 @@ import { authenticate } from "./common/middlewares/auth.middleware.js";
 import { JWT_ACCESS_SECRET } from "./common/configs/environment.js";
 import userRoute from "./modules/user/user.routes.js";
 import movieRoute from "./modules/movie/movie.routes.js";
+import categoryRouter from "./modules/category/category.routes.js";
 
 const routes = Router();
 
 routes.use("/auth", authRoute);
 routes.use("/movie", movieRoute);
-
+routes.use("/category", categoryRouter);
 routes.use("/user", authenticate(JWT_ACCESS_SECRET), userRoute);
 
 export default routes;
