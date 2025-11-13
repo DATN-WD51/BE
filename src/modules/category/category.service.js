@@ -46,3 +46,18 @@ export const updateCategoryService = async (id, payload) => {
   const update = await Category.findByIdAndUpdate(id, payload, { new: true });
   return update;
 };
+
+export const updateStatusCategoryService = async (id) => {
+  const findCategory = await Category.findOne({
+    _id: id,
+  });
+  if (!findCategory) throwError(400, "Không tìm thấy thể loại!");
+  findCategory.status = !findCategory.status;
+  await findCategory.save();
+  return {
+    data: findCategory,
+    massage: findCategory.status
+      ? "Kích hoạt thể loại thành công!"
+      : "Khóa thể loại thành công",
+  };
+};

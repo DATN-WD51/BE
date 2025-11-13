@@ -5,6 +5,7 @@ import {
   getAllCategoryService,
   getDetailCategoryService,
   updateCategoryService,
+  updateStatusCategoryService,
 } from "./category.service.js";
 
 export const getAllCategory = handleAsync(async (req, res) => {
@@ -29,5 +30,11 @@ export const updateCategory = handleAsync(async (req, res) => {
   const { params, body } = req;
   const { id } = params;
   const data = await updateCategoryService(id, body);
-  return createResponse(res, 200, data.message, data.data);
+  return createResponse(res, 200, "Cập nhật thể loại thành công!", data);
+});
+
+export const updateStatusCategory = handleAsync(async (req, res) => {
+  const { id } = req.params;
+  const data = await updateStatusCategoryService(id);
+  return createResponse(res, 200, data.massage, data.data);
 });
