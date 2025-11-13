@@ -1,0 +1,29 @@
+import dayjs from "dayjs";
+import cron from "node-cron";
+import Movie from "../movie/movie.model.js";
+
+export const movieStatusJob = () => {
+  cron.schedule("0 0 * * *", async () => {
+    try {
+      const today = dayjs().startOf("day").toDate();
+      await Movie.updateMany({}, [
+        {
+          $set: {
+            statusRelease: {
+              $switch: {
+                branches: [
+                  { case: { $lt: [today, "$releaseDate"] }, then: "upComing" },
+                  { case: { $gt: [today, "$endDate"] }, then: "released" },
+                ],
+                default: "nowShowing",
+              },
+            },
+          },
+        },
+      ]);
+      console.log("Cập nhật statusRelease cho tất cả phim thành công!");
+    } catch (err) {
+      console.log("Lỗi khi cập nhật statusRelease:", err);
+    }
+  });
+};
