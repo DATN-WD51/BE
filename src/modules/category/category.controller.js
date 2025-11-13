@@ -4,6 +4,7 @@ import {
   createCategoryService,
   getAllCategoryService,
   getDetailCategoryService,
+  updateCategoryService,
 } from "./category.service.js";
 
 export const getAllCategory = handleAsync(async (req, res) => {
@@ -22,4 +23,11 @@ export const createCategory = handleAsync(async (req, res) => {
   const { body } = req;
   const data = await createCategoryService(body);
   return createResponse(res, 201, "Tạo thể loại thành công!", data);
+});
+
+export const updateCategory = handleAsync(async (req, res) => {
+  const { params, body } = req;
+  const { id } = params;
+  const data = await updateCategoryService(id, body);
+  return createResponse(res, 200, data.message, data.data);
 });

@@ -36,3 +36,13 @@ export const createCategoryService = async (payload) => {
   const newCategory = await Category.create(payload);
   return newCategory;
 };
+
+export const updateCategoryService = async (id, payload) => {
+  const existed = await Category.findOne({
+    _id: { $ne: id },
+    name: { $regex: new RegExp(payload.name, "i") },
+  });
+  if (existed) throwError(400, "Thể loai này đã tồn tại trên hệ thống!");
+  const update = await Category.findByIdAndUpdate(id, payload, { new: true });
+  return update;
+};
