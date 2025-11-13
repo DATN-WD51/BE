@@ -1,7 +1,9 @@
 import { Router } from "express";
-import { getAllCategory } from "./category.controller.js";
+import { getAllCategory, getDetailCategory } from "./category.controller.js";
 
 const categoryRouter = Router();
 
 categoryRouter.get("/", getAllCategory);
+categoryRouter.get("/detail/:id", getDetailCategory);
+
 export default categoryRouter;

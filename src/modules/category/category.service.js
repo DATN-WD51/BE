@@ -21,3 +21,8 @@ export const getAllCategoryService = async (query) => {
   }
   return categories;
 };
+
+export const getDetailCategoryService = async (id) => {
+  const category = await Category.findById(id);
+  return category;
+};
