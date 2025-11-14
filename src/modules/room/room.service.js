@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import { throwError } from "../../common/utils/create-response";
-import { queryHelper } from "../../common/utils/query-helper";
-import Room from "./room.model";
-import Seat from "../seat/seat.model";
+import { throwError } from "../../common/utils/create-response.js";
+import { queryHelper } from "../../common/utils/query-helper.js";
+import Room from "./room.model.js";
+import Seat from "../seat/seat.model.js";
 
 export const getSeatByRoomService = async (roomId) => {
   const room = await Room.findById(roomId);

@@ -1,5 +1,5 @@
-import handleAsync from "../../common/utils/async-handler";
-import createResponse from "../../common/utils/create-response";
+import handleAsync from "../../common/utils/async-handler.js";
+import createResponse from "../../common/utils/create-response.js";
 import {
   getAllRoomService,
   getDetailRoomService,

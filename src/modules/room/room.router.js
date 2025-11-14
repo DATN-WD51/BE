@@ -5,7 +5,7 @@ import {
   getSeatByRoom,
   updateRoom,
   updateStatusRoom,
-} from "./room.controller";
+} from "./room.controller.js";
 const roomRoute = Router();
 roomRoute.get("/seat/:roomId", getSeatByRoom);
 roomRoute.get("/", getAllRoom);
