@@ -206,6 +206,7 @@ export const callbackLoginGoogleService = async (code) => {
     );
     return { success: true, user: user.toObject(), accessToken };
   } catch (error) {
+    console.log(error);
     return { success: false, data: "server" };
   }
 };

@@ -23,7 +23,6 @@ export const generateToken = (payload, secret, expired = "1d") => {
 };
 
 export const getResponseGoogle = async (code) => {
-  console.log(code);
   const { data: tokenResponse } = await axios.post(
     "https://oauth2.googleapis.com/token",
     null,
@@ -45,6 +44,5 @@ export const getResponseGoogle = async (code) => {
       },
     },
   );
-
   return user;
 };

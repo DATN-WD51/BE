@@ -23,7 +23,7 @@ export const queryHelper = async (Model, queryParams, options = {}) => {
     queryConditions.deletedAt = { $ne: null };
   }
 
-  Object.entries(filters).forEach((key, value) => {
+  Object.entries(filters).forEach(([key, value]) => {
     applyFilter(key, value, queryConditions);
   });
 
