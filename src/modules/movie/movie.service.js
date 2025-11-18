@@ -34,7 +34,7 @@ export const createMovieService = async (payload) => {
   const existingMovie = await Movie.findOne({
     name: { $regex: `^${payload.name}$`, $options: "i" },
   });
-  if (new Date(payload.releaseDate) < new Date(payload.endDate))
+  if (new Date(payload.releaseDate) > new Date(payload.endDate))
     throwError(400, "Thời gian ngừng chiếu phải sau thời gian công chiếu!");
   if (existingMovie) throwError(400, "Phim này đã tồn tại trong hệ thống!");
   if (new Date(payload.releaseDate) < new Date()) {
