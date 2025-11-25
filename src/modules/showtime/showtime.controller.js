@@ -4,6 +4,7 @@ import createResponse from "../../common/utils/create-response.js";
 import {
   createShowtimeService,
   getAllShowtimeService,
+  getDetailShowtimeService,
 } from "./showtime.service.js";
 
 export const createShowtime = handleAsync(async (req, res) => {
@@ -21,4 +22,10 @@ export const getAllShowtime = handleAsync(async (req, res) => {
   const { query } = req;
   const showtimes = await getAllShowtimeService(query);
   return createResponse(res, 200, "OK", showtimes.data, showtimes.meta);
+});
+
+export const getDetailShowtime = handleAsync(async (req, res) => {
+  const { id } = req.params;
+  const data = await getDetailShowtimeService(id);
+  return createResponse(res, 200, "OK", data);
 });

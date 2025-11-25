@@ -5,7 +5,7 @@ import { JWT_ACCESS_SECRET } from "./common/configs/environment.js";
 import userRoute from "./modules/user/user.routes.js";
 import movieRoute from "./modules/movie/movie.routes.js";
 import categoryRouter from "./modules/category/category.routes.js";
-import roomRoute from "./modules/room/room.router.js";
+import roomRoute from "./modules/room/room.routes.js";
 import seatRoute from "./modules/seat/seat.routes.js";
 import showtimeRoute from "./modules/showtime/showtime.routes.js";
 

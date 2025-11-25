@@ -38,3 +38,10 @@ export const getAllShowtimeService = async (query) => {
   });
   return showtimes;
 };
+
+export const getDetailShowtimeService = async (id) => {
+  const showtime = await Showtime.findById(id)
+    .populate("movieId")
+    .populate("roomId");
+  return showtime;
+};
