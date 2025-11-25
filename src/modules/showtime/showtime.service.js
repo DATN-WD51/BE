@@ -45,3 +45,55 @@ export const getDetailShowtimeService = async (id) => {
     .populate("roomId");
   return showtime;
 };
+
+export const getMovieHasShowtimeService = async (query) => {
+  const { page = 1, limit = 10, ...otherQuery } = query;
+  const { data } = await getAllShowtimeService(otherQuery);
+
+  const moviesMap = new Map();
+
+  for (const showtime of data) {
+    const movieId = `${showtime.movieId._id}`;
+    const startTime = dayjs(showtime.startTime);
+    const dayOfWeek = startTime.day();
+    if (moviesMap.has(movieId)) {
+      const existing = moviesMap.get(movieId);
+      existing.showtimeCount += 1;
+      if (startTime.isBefore(existing.firstStartTime)) {
+        existing.firstStartTime = startTime;
+      }
+      if (startTime.isAfter(existing.lastStartTime)) {
+        existing.lastStartTime = startTime;
+      }
+      existing.dayOfWeeks.add(dayOfWeek);
+    } else {
+      moviesMap.set(movieId, {
+        ...showtime.movieId.toObject(),
+        showtimeCount: 1,
+        firstStartTime: startTime,
+        lastStartTime: startTime,
+        dayOfWeeks: new Set([dayOfWeek]),
+      });
+    }
+  }
+  const movies = Array.from(moviesMap.values()).map((movie) => ({
+    ...movie,
+    firstStartTime: movie.firstStartTime.toDate(),
+    lastStartTime: movie.lastStartTime.toDate(),
+    dayOfWeeks: Array.from(movie.dayOfWeeks).sort(),
+  }));
+
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const pagedMovies = movies.slice(startIndex, endIndex);
+
+  return {
+    data: pagedMovies,
+    meta: {
+      total: movies.length,
+      page: Number(page),
+      limit: Number(limit),
+      totalPages: Math.ceil(movies.length / limit),
+    },
+  };
+};

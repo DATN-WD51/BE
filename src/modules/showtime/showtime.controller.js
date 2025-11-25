@@ -5,6 +5,7 @@ import {
   createShowtimeService,
   getAllShowtimeService,
   getDetailShowtimeService,
+  getMovieHasShowtimeService,
 } from "./showtime.service.js";
 
 export const createShowtime = handleAsync(async (req, res) => {
@@ -28,4 +29,10 @@ export const getDetailShowtime = handleAsync(async (req, res) => {
   const { id } = req.params;
   const data = await getDetailShowtimeService(id);
   return createResponse(res, 200, "OK", data);
+});
+
+export const getMovieHasShowtime = handleAsync(async (req, res) => {
+  const { query } = req;
+  const movies = await getMovieHasShowtimeService(query);
+  return createResponse(res, 200, "OK", movies.data, movies.meta);
 });
