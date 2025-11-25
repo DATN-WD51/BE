@@ -31,3 +31,10 @@ export const createShowtimeService = async (payload) => {
   const showtime = await Showtime.create({ ...payload, dayOfWeek, endTime });
   return showtime;
 };
+
+export const getAllShowtimeService = async (query) => {
+  const showtimes = await queryHelper(Showtime, query, {
+    populate: [{ path: "movieId" }, { path: "roomId" }],
+  });
+  return showtimes;
+};
