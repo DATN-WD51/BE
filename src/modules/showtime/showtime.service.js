@@ -8,6 +8,7 @@ import {
   checkAvaiableRoom,
   checkConflictShowime,
 } from "./showtime.utils.js";
+import { SHOWTIME_STATUS } from "../../common/constants/showtime.js";
 
 export const createShowtimeService = async (payload) => {
   const { movieId, roomId, startTime } = payload;
@@ -96,4 +97,22 @@ export const getMovieHasShowtimeService = async (query) => {
       totalPages: Math.ceil(movies.length / limit),
     },
   };
+};
+
+export const updateShowtimeService = async (payload, id) => {
+  const { roomId, startTime, endTime } = payload;
+  const showtime = await Showtime.findById(id);
+  if (!showtime) throwError(404, "Xuất chiếu không tồn tại!");
+  if (showtime.status === SHOWTIME_STATUS.IN_PROGRESS)
+    throwError(400, "Không thể cập nhật xuất chiếu đang được chiếu!");
+  const conflict = await checkConflictShowime(roomId, startTime, endTime, id);
+  if (conflict)
+    throwError(
+      400,
+      ` Phòng chiếu ${conflict.roomId.name} đã có xuất chiếu vào lúc ${dayjs(conflict.startTime).format("HH:mm, [Ngày] DD [Tháng] MM [Năm] YYYY")}`,
+    );
+  showtime.set(payload);
+  await showtime.save();
+
+  return showtime;
 };
