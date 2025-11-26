@@ -7,6 +7,7 @@ import {
   checkAvaiableMovie,
   checkAvaiableRoom,
   checkConflictShowime,
+  generateShowtime,
 } from "./showtime.utils.js";
 import { SHOWTIME_STATUS } from "../../common/constants/showtime.js";
 
@@ -115,4 +116,21 @@ export const updateShowtimeService = async (payload, id) => {
   await showtime.save();
 
   return showtime;
+};
+
+export const createManyShowtimeService = async (payload) => {
+  const { startDate, endDate, dayOfWeeks, fixedHour, ...otherPayload } =
+    payload;
+  if (!dayjs(startDate).isBefore(dayjs(endDate))) {
+    throwError(400, "Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc!");
+  }
+  const showtime = await generateShowtime(
+    otherPayload,
+    startDate,
+    endDate,
+    dayOfWeeks,
+    fixedHour,
+  );
+  const createShowtimes = Showtime.insertMany(showtimes);
+  return createShowtimes;
 };

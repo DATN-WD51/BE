@@ -42,3 +42,57 @@ export const checkConflictShowime = async (
   const conflict = await Showtime.findOne(condition).populate("roomId");
   return conflict;
 };
+
+export const generateShowtime = async (
+  payload,
+  startDate,
+  endDate,
+  dayOfWeeks,
+  fixedHour,
+) => {
+  const start = dayjs(startDate).startOf("day");
+  const end = dayjs(endDate).endOf("day");
+  const result = [];
+  let current = start;
+  const movie = await checkAvaiableMovie(payload.movieId);
+  await checkAvaiableRoom(payload.roomId);
+  while (current.isBefore(end) || current.isSame(end, "day")) {
+    const day = current.day();
+    if (dayOfWeeks.includes(day)) {
+      let showtimeStart;
+      if (typeof fixedHour === "string") {
+        const [hour, minute] = fixedHour.split(":").map(Number);
+        showtimeStart = current
+          .hour(hour)
+          .minute(minute)
+          .second(0)
+          .millisecond(0);
+      } else {
+        showtimeStart = current
+          .hour(fixedHour.hour)
+          .minute(fixedHour.minute)
+          .second(0)
+          .millisecond(0);
+      }
+      const { endTime } = calculatorEndTime(movie.duration, showtimeStart);
+      const conflict = await checkConflictShowime(
+        payload.roomId,
+        showtimeStart.toDate(),
+        endTime,
+      );
+      if (conflict)
+        throwError(
+          400,
+          `Phòng chiếu ${conflict.roomId.name} đã có xuất chiếu vào lúc ${dayjs(conflict.startTime).format("HH:mm, [Ngày] DD [Tháng] MM [Năm] YYYY")}`,
+        );
+      result.push({
+        ...payload,
+        startTime: showtimeStart.toDate(),
+        endTime: endTime,
+        dayOfWeek: showtimeStart.day(),
+      });
+    }
+    current = current.add(1, "day");
+  }
+  return result;
+};
