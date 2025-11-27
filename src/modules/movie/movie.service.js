@@ -85,7 +85,7 @@ export const updateMovieService = async (id, payload) => {
     }
   }
   if (now.isBefore(releaseDate)) {
-    movie.statusRelease = "upComing";
+    movie.statusRelease = "upcoming";
   } else if (now.isAfter(endDate)) {
     movie.statusRelease = "ngungChieu";
   } else {

@@ -12,7 +12,7 @@ export const movieStatusJob = () => {
             statusRelease: {
               $switch: {
                 branches: [
-                  { case: { $lt: [today, "$releaseDate"] }, then: "upComing" },
+                  { case: { $lt: [today, "$releaseDate"] }, then: "upcoming" },
                   { case: { $gt: [today, "$endDate"] }, then: "released" },
                 ],
                 default: "nowShowing",
