@@ -9,6 +9,7 @@ import routes from "./src/routes.js";
 import { checkVersion } from "./src/common/configs/node-version.js";
 import connectDB from "./src/common/configs/database.js";
 import { movieStatusJob } from "./src/modules/job/statusMovieJob.js";
+import { showtimeStatusJob } from "./src/modules/job/statusShowtimeJob.js";
 
 checkVersion();
 

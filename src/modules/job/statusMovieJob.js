@@ -28,10 +28,11 @@ export const functionUpdateMovie = async () => {
 
 let isCronStarted = false;
 
-export const movieStatusJob = () => {
+export const movieStatusJob = async () => {
   if (isCronStarted) return;
   isCronStarted = true;
   functionUpdateMovie();
+  await functionUpdateMovie();
 
   cron.schedule(
     "0 0 * * *",
