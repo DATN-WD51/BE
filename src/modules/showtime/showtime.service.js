@@ -131,6 +131,6 @@ export const createManyShowtimeService = async (payload) => {
     dayOfWeeks,
     fixedHour,
   );
-  const createShowtimes = Showtime.insertMany(showtimes);
+  const createShowtimes = Showtime.insertMany(showtime);
   return createShowtimes;
 };

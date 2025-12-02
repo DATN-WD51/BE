@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  createManyShowtime,
   createShowtime,
   getAllShowtime,
   getDetailShowtime,
@@ -13,5 +14,6 @@ showtimeRoute.get("/", getAllShowtime);
 showtimeRoute.get("/detail/:id", getDetailShowtime);
 showtimeRoute.get("/movie", getMovieHasShowtime);
 showtimeRoute.patch("/update/:id", updateShowtime);
+showtimeRoute.post("/many", createManyShowtime);
 
 export default showtimeRoute;
