@@ -7,6 +7,7 @@ import {
   getAllShowtimeService,
   getDetailShowtimeService,
   getMovieHasShowtimeService,
+  getShowtimesByWeekdayService,
   updateShowtimeService,
 } from "./showtime.service.js";
 import { DAY_NAMES } from "../../common/constants/showtime.js";
@@ -54,4 +55,10 @@ export const createManyShowtime = handleAsync(async (req, res) => {
     .join(", ");
   const message = `Tạo thành công ${created.length} xuất chiếu. Từ ngày ${dayjs(body.startDate).format("[Ngày] DD [Tháng] MM [Năm] YYYY")} đến ${dayjs(body.endDate).format("[Ngày] DD [Tháng] MM [Năm] YYYY")} với các ngày trong tuần: ${dayNamesSelected}`;
   return createResponse(res, 200, message, created);
+});
+
+export const getShowtimesByWeekday = handleAsync(async (req, res) => {
+  const { query } = req;
+  const showtimes = await getShowtimesByWeekdayService(query);
+  return createResponse(res, 200, "OK", showtimes.data, showtimes.meta);
 });
