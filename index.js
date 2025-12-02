@@ -31,11 +31,12 @@ let server;
 
 connectDB()
   .then(() => {
-    movieStatusJob();
     server = app.listen(PORT, () => {
       if (NODE_ENV === "development") {
         console.log(`START API: http://localhost:${PORT}/api`);
       }
+      movieStatusJob();
+      showtimeStatusJob();
     });
   })
   .catch((err) => {
