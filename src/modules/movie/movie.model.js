@@ -10,8 +10,8 @@ const movieSchema = new mongoose.Schema(
     },
     statusRelease: {
       type: String,
-      enum: ["", "nowShowing", "released"],
-      default: "",
+      enum: ["upcoming", "nowShowing", "released"],
+      default: "upcoming",
     },
     trailer: String,
     actor: { type: [String], required: true },

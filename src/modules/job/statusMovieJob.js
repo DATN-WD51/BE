@@ -14,7 +14,7 @@ export const functionUpdateMovie = async () => {
                 { case: { $lt: [today, "$releaseDate"] }, then: "upcoming" },
                 { case: { $gt: [today, "$endDate"] }, then: "released" },
               ],
-              default: "snowShowing",
+              default: "nowShowing",
             },
           },
         },

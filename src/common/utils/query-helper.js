@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
+
 export const queryHelper = async (Model, queryParams, options = {}) => {
   const {
     page = 1,
     limit = 10,
-    sort = "createAt",
+    sort = "createdAt",
     order = "desc",
     search,
     searchFields = [],
@@ -19,6 +20,7 @@ export const queryHelper = async (Model, queryParams, options = {}) => {
   if (isDeleted === "false") {
     queryConditions.deletedAt = null;
   }
+
   if (isDeleted === "true") {
     queryConditions.deletedAt = { $ne: null };
   }
@@ -50,7 +52,7 @@ export const queryHelper = async (Model, queryParams, options = {}) => {
 
   if (pagination) {
     const pageNum = parseInt(page, 10);
-    const limitNum = parseInt(page, 10);
+    const limitNum = parseInt(limit, 10);
     const skip = (pageNum - 1) * limitNum;
     query = query.skip(skip).limit(limitNum);
 
