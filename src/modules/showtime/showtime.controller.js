@@ -31,8 +31,9 @@ export const getAllShowtime = handleAsync(async (req, res) => {
 
 export const getDetailShowtime = handleAsync(async (req, res) => {
   const { id } = req.params;
-  const data = await getDetailShowtimeService(id);
-  return createResponse(res, 200, "OK", data);
+  const { query } = req;
+  const response = await getDetailShowtimeService(id, query);
+  return createResponse(res, 200, "OK", response);
 });
 
 export const getMovieHasShowtime = handleAsync(async (req, res) => {

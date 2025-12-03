@@ -88,8 +88,9 @@ export const getShowtimesByWeekdayService = async (query) => {
   return pagination ? createPagination(map, Number(page), Number(limit)) : map;
 };
 
-export const getDetailShowtimeService = async (id) => {
-  const showtime = await Showtime.findById(id)
+export const getDetailShowtimeService = async (id, query) => {
+  const condition = { _id: id, ...query };
+  const showtime = await Showtime.findById(condition)
     .populate("movieId")
     .populate("roomId");
   return showtime;
