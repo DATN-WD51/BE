@@ -8,6 +8,7 @@ import categoryRouter from "./modules/category/category.routes.js";
 import roomRoute from "./modules/room/room.routes.js";
 import seatRoute from "./modules/seat/seat.routes.js";
 import showtimeRoute from "./modules/showtime/showtime.routes.js";
+import seatStatusRoute from "./modules/socket/seat-status/seat.status.routes.js";
 
 const routes = Router();
 
@@ -18,5 +19,6 @@ routes.use("/room", roomRoute);
 routes.use("/user", authenticate(JWT_ACCESS_SECRET), userRoute);
 routes.use("/seat", seatRoute);
 routes.use("/showtime", showtimeRoute);
+routes.use("/seat-status", seatStatusRoute);
 
 export default routes;
