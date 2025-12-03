@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import morgan from "morgan";
+import http from "http";
 import { NODE_ENV, PORT } from "./src/common/configs/environment.js";
 import errorHandler from "./src/common/middlewares/error.middleware.js";
 import jsonValidator from "./src/common/middlewares/json-valid.middleware.js";
@@ -10,6 +11,8 @@ import { checkVersion } from "./src/common/configs/node-version.js";
 import connectDB from "./src/common/configs/database.js";
 import { movieStatusJob } from "./src/modules/job/statusMovieJob.js";
 import { showtimeStatusJob } from "./src/modules/job/statusShowtimeJob.js";
+import { initSocket } from "./src/modules/socket/index.js";
+import { seatStatusJob } from "./src/modules/job/seatStatusJob.js";
 
 checkVersion();
 
@@ -32,12 +35,16 @@ let server;
 
 connectDB()
   .then(() => {
-    server = app.listen(PORT, () => {
+    console.log("✓ Connected to MongoDB");
+    server = http.createServer(app);
+    initSocket(server);
+    movieStatusJob();
+    showtimeStatusJob();
+    seatStatusJob();
+    server = app.listen(PORT, async () => {
       if (NODE_ENV === "development") {
-        console.log(`START API: http://localhost:${PORT}/api`);
+        console.log(`START API: http://localhost:${PORT}`);
       }
-      movieStatusJob();
-      showtimeStatusJob();
     });
   })
   .catch((err) => {
@@ -48,7 +55,13 @@ connectDB()
 process.on("unhandledRejection", (error) => {
   console.error(`Error: ${error.message}`);
   if (server) {
-    server.close(() => process.exit(1));
+    server.close(async () => {
+      const ngrok = await import("ngrok");
+      if (ngrok) {
+        await ngrok.kill();
+      }
+      process.exit(1);
+    });
   } else {
     process.exit(1);
   }
