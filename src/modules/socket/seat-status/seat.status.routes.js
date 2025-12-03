@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  extendHoldSeat,
   getSeatShowtime,
   toogleSeat,
   unHoldSeat,
@@ -13,5 +14,6 @@ seatStatusRoute.get("/seat-map/:roomId/:showtimeId", getSeatShowtime);
 seatStatusRoute.use(authenticate(JWT_ACCESS_SECRET));
 seatStatusRoute.post("/toogle-seat", toogleSeat);
 seatStatusRoute.patch("/un-hold", unHoldSeat);
+seatStatusRoute.patch("/extend-hold/:showtimeId", extendHoldSeat);
 
 export default seatStatusRoute;
