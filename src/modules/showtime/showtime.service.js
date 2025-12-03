@@ -46,14 +46,35 @@ export const getAllShowtimeService = async (query) => {
 };
 
 export const getShowtimesByWeekdayService = async (query) => {
-  const { page = 1, limit = 10, pagination = true, ...otherQuery } = query;
+  const {
+    page = 1,
+    limit = 10,
+    pagination = true,
+    groupTime = false,
+    ...otherQuery
+  } = query;
   const showtimes = await getAllShowtimeService(otherQuery);
   const map = {};
   showtimes.data.forEach((st) => {
     if (!st.movieId) return;
     const dateKey = dayjs(st.startTime).format("YYYY-MM-DD");
     if (!map[dateKey]) map[dateKey] = [];
-    map[dateKey].push(st);
+    const existIndex = map[dateKey].findIndex(
+      (item) =>
+        dayjs(item.startTime).format("HH:mm") ===
+        dayjs(st.startTime).format("HH:mm"),
+    );
+    if (existIndex !== -1 && groupTime) {
+      if (!map[dateKey][existIndex].externalRoom) {
+        map[dateKey][existIndex].externalRoom = [];
+      }
+      map[dateKey][existIndex].externalRoom.push(st.roomId);
+      return;
+    }
+    map[dateKey].push({
+      ...st.toObject(),
+      externalRoom: [st.roomId],
+    });
   });
   return pagination ? createPagination(map, Number(page), Number(limit)) : map;
 };
