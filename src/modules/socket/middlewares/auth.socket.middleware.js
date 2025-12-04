@@ -2,7 +2,7 @@ import { throwError } from "../../../common/utils/create-response.js";
 
 export default async (socket, next) => {
   try {
-    const token = socket.handsshake.auth?.token;
+    const token = socket.handshake.auth?.token;
     if (!token) return next(throwError(401, "Unauthorized"));
     next();
   } catch (error) {

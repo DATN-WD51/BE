@@ -73,7 +73,7 @@ export const checkingHoldSeat = async (userId, showtimeId, seatId) => {
   }).populate("seatId");
   const heldSeatId = new Set(seats.map((s) => s.seatId?._id.toString()));
   const invalidSeatIds = seatId.filter(
-    (item) => !heldSeatId.has(item._id.toString),
+    (item) => !heldSeatId.has(item._id.toString()),
   );
   if (invalidSeatIds.length > 0) {
     throwError(

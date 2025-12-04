@@ -41,7 +41,7 @@ connectDB()
     movieStatusJob();
     showtimeStatusJob();
     seatStatusJob();
-    server = app.listen(PORT, async () => {
+    server.listen(PORT, async () => {
       if (NODE_ENV === "development") {
         console.log(`START API: http://localhost:${PORT}`);
       }
@@ -56,10 +56,6 @@ process.on("unhandledRejection", (error) => {
   console.error(`Error: ${error.message}`);
   if (server) {
     server.close(async () => {
-      const ngrok = await import("ngrok");
-      if (ngrok) {
-        await ngrok.kill();
-      }
       process.exit(1);
     });
   } else {
