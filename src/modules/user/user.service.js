@@ -4,6 +4,8 @@ import { AUTH_MESSAGES } from "../auth/auth.messages.js";
 import User from "./user.model.js";
 import { comparePassword, hashPassword } from "../auth/auth.utils.js";
 import { hash } from "crypto";
+import { queryHelper } from "../../common/utils/query-helper.js";
+import Ticket from "../ticket/ticket.model.js";
 
 export const getProfileService = async (userId) => {
   const user = await User.findById(userId);
@@ -35,4 +37,12 @@ export const changePasswordService = async (payload, userId) => {
   const hashNewPassword = await hashPassword(payload.newPassword);
   user.password = hashNewPassword;
   return await user.save();
+};
+export const getMyticketService = async (userId, query) => {
+  const tickets = await queryHelper(Ticket, { userId, ...query });
+  return tickets;
+};
+export const getMyDetailTicketService = async (userId, tickeId) => {
+  const ticket = await Ticket.findOne({ userId, _id: tickeId });
+  return ticket;
 };
