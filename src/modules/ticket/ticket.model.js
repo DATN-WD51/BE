@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { TICKET_STATUS } from "../../common/constants/ticket";
+import { TICKET_STATUS } from "../../common/constants/ticket.js";
 
 const ticketItems = new mongoose.Schema(
   {

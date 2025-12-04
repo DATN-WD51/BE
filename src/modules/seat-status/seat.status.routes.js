@@ -5,8 +5,8 @@ import {
   toogleSeat,
   unHoldSeat,
 } from "./seat.status.controller.js";
-import { authenticate } from "../../../common/middlewares/auth.middleware.js";
-import { JWT_ACCESS_SECRET } from "../../../common/configs/environment.js";
+import { authenticate } from "../../common/middlewares/auth.middleware.js";
+import { JWT_ACCESS_SECRET } from "../../common/configs/environment.js";
 
 const seatStatusRoute = Router();
 

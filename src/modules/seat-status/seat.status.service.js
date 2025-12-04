@@ -1,16 +1,15 @@
 import dayjs from "dayjs";
-import { getIO } from "../socket.instance.js";
-import { SEAT_STATUS } from "../../../common/constants/seat.status.js";
-import Seat from "../../seat/seat.model.js";
+import { getIO } from "../socket/socket.instance.js";
+import { SEAT_STATUS } from "../../common/constants/seat.status.js";
+import Seat from "../seat/seat.model.js";
 import SeatStatus from "./seat.status.model.js";
-import Showtime from "../../showtime/showtime.model.js";
-import { throwError } from "../../../common/utils/create-response.js";
+import Showtime from "../showtime/showtime.model.js";
+import { throwError } from "../../common/utils/create-response.js";
 
 export const getSeatShowtimeService = async (roomId, showtimeId, query) => {
   const seats = await Seat.find({ roomId, ...query }).lean();
   const seatSchedules = await SeatStatus.find({ showtimeId }).lean();
-  const scheduleData = await Showtime.find(showtimeId);
-
+  const scheduleData = await Showtime.findById(showtimeId);
   const result = seats.map((seat) => {
     const schedule = seatSchedules.find(
       (s) => s.seatId.toString() === seat._id.toString(),

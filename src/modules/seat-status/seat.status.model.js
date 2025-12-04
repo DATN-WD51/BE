@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { SEAT_STATUS } from "../../../common/constants/seat.status.js";
+import { SEAT_STATUS } from "../../common/constants/seat.status.js";
 
 const seatStatuSchema = new mongoose.Schema(
   {

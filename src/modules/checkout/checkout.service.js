@@ -5,7 +5,7 @@ import {
 import {
   extendHoldSeatTime,
   unHoldSeatService,
-} from "../socket/seat-status/seat.status.service.js";
+} from "../seat-status/seat.status.service.js";
 import Ticket from "../ticket/ticket.model.js";
 import {
   checkingHoldSeat,
@@ -20,8 +20,8 @@ export const checkoutWithVnpayService = async (payload, userId) => {
     label: item.seatLabel,
     _id: item.seatId,
   }));
-  await checkShowtimeAvaiable(payload.showtiemId);
-  await checkingHoldSeat(userId, payload.showtiemId, seat);
+  await checkShowtimeAvaiable(payload.showtimeId);
+  await checkingHoldSeat(userId, payload.showtimeId, seat);
   await checkAvaiableMovie(payload.movieId);
   await checkAvaiableRoom(payload.roomId);
   await extendHoldSeatTime(

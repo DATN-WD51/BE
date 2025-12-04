@@ -2,7 +2,7 @@ import { dateFormat, ignoreLogger, ProductCode, VNPay, VnpLocale } from "vnpay";
 import { throwError } from "../../common/utils/create-response.js";
 import Showtime from "../showtime/showtime.model.js";
 import { SHOWTIME_STATUS } from "../../common/constants/showtime.js";
-import SeatStatus from "../socket/seat-status/seat.status.model.js";
+import SeatStatus from "../seat-status/seat.status.model.js";
 import { SEAT_STATUS } from "../../common/constants/seat.status.js";
 
 export const generateVnpayLink = async (orderId, amount, userId) => {
@@ -68,7 +68,7 @@ export const checkingHoldSeat = async (userId, showtimeId, seatId) => {
   const seats = await SeatStatus.find({
     userId,
     showtimeId,
-    seatId: { $in: seatId.map((item) => item.id) },
+    seatId: { $in: seatId.map((item) => item._id) },
     status: SEAT_STATUS.HOLD,
   }).populate("seatId");
   const heldSeatId = new Set(seats.map((s) => s.seatId?._id.toString()));

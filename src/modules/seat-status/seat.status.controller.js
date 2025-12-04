@@ -1,6 +1,6 @@
-import { ROOT_MESSAGES } from "../../../common/constants/messages.js";
-import handleAsync from "../../../common/utils/async-handler.js";
-import createResponse from "../../../common/utils/create-response.js";
+import { ROOT_MESSAGES } from "../../common/constants/messages.js";
+import handleAsync from "../../common/utils/async-handler.js";
+import createResponse from "../../common/utils/create-response.js";
 import {
   extendHoldSeatTime,
   getSeatShowtimeService,

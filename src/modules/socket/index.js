@@ -3,13 +3,12 @@ import { setIO } from "./socket.instance.js";
 import authSocketMiddleware from "./middlewares/auth.socket.middleware.js";
 import { socketConfig } from "../../common/configs/socket.js";
 import seatSocketHandler from "./modules/seat.socket.handler.js";
-import { unHoldSeatService } from "./seat-status/seat.status.service.js";
+import { unHoldSeatService } from "../seat-status/seat.status.service.js";
 
 export const initSocket = (httpServer) => {
   const io = new Server(httpServer, socketConfig);
 
   setIO(io);
-
   io.use(authSocketMiddleware);
 
   io.on("connection", (socket) => {

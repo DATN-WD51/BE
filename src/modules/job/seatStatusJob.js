@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import SeatStatus from "../socket/seat-status/seat.status.model.js";
+import SeatStatus from "../seat-status/seat.status.model.js";
 import { SEAT_STATUS } from "../../common/constants/seat.status.js";
 import { getIO } from "../socket/socket.instance.js";
 import cron from "node-cron";

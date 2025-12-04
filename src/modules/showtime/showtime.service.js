@@ -15,7 +15,7 @@ import Movie from "../movie/movie.model.js";
 
 import { createPagination } from "../../common/utils/create-pagination.js";
 import { SEAT_STATUS } from "../../common/constants/seat.status.js";
-import SeatStatus from "../socket/seat-status/seat.status.model.js";
+import SeatStatus from "../seat-status/seat.status.model.js";
 
 export const createShowtimeService = async (payload) => {
   const { movieId, roomId, startTime } = payload;
