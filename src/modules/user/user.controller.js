@@ -1,50 +1,40 @@
-import { throwError } from "../../common/utils/create-response.js";
-import { queryHelper } from "../../common/utils/query-helper.js";
-import { AUTH_MESSAGES } from "../auth/auth.messages.js";
-import { comparePassword, hashPassword } from "../auth/auth.utils.js";
-import Ticket from "../ticket/ticket.model.js";
-import User from "./user.model.js";
+import handleAsync from "../../common/utils/async-handler.js";
+import createResponse from "../../common/utils/create-response.js";
+import {
+  changePasswordService,
+  getMyDetailTicketService,
+  getMyticketService,
+  getProfileService,
+  updateProfileService,
+} from "./user.service.js";
 
-export const getProfileService = async (userId) => {
-  const user = await User.findById(userId);
-  if (!user) {
-    throwError(401, AUTH_MESSAGES.NOTFOUND_USER);
-  }
-  return user;
-};
+export const getProfile = handleAsync(async (req, res) => {
+  const { _id } = req.user;
+  const response = await getProfileService(_id);
+  return createResponse(res, 200, "OK", response);
+});
 
-export const updateProfileService = async (payload, userId) => {
-  const user = await User.findById(userId);
-  if (!user) throwError(400, "Không tìm thấy người dùng");
-  const allowedFields = ["userName", "phone", "avatar"];
-  allowedFields.forEach((field) => {
-    if (payload[field] !== undefined) {
-      user[field] = payload[field];
-    }
-  });
-  await user.save();
-  return user;
-};
+export const updateProfile = handleAsync(async (req, res) => {
+  const { _id } = req.user;
+  const response = await updateProfileService(req.body, _id);
+  return createResponse(res, 200, "Cập nhật thông tin thành công!", response);
+});
 
-export const changePasswordService = async (payload, userId) => {
-  const user = await User.findById(userId);
-  if (!user) throwError(400, "Không tìm thấy người dùng!");
-  const isMatchOldPassword = await comparePassword(
-    payload.oldPassword,
-    user.password,
-  );
-  if (!isMatchOldPassword) throwError(400, "Mật khẩu không chính xác!");
-  const hashNewPassword = await hashPassword(payload.newPassword);
-  user.password = hashNewPassword;
-  return await user.save();
-};
+export const changePassword = handleAsync(async (req, res) => {
+  const { _id } = req.user;
+  const response = await changePasswordService(req.body, _id);
+  return createResponse(res, 200, "Đổi mật khẩu thành công!", response);
+});
 
-export const getMyticketService = async (userId, query) => {
-  const tickets = await queryHelper(Ticket, { userId, ...query });
-  return tickets;
-};
+export const getMyTicket = handleAsync(async (req, res) => {
+  const { _id } = req.user;
+  const response = await getMyticketService(_id, req.query);
+  return createResponse(res, 200, "OK", response.data, response.meta);
+});
 
-export const getMyDetailTicketService = async (userId, ticketId) => {
-  const ticket = await Ticket.findOne({ userId, _id: ticketId });
-  return ticket;
-};
+export const getDetailMyTicket = handleAsync(async (req, res) => {
+  const { ticketId } = req.params;
+  const { _id } = req.user;
+  const response = await getMyDetailTicketService(ticketId, _id);
+  return createResponse(res, 200, "OK", response);
+});
