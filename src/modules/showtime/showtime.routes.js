@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createManyShowtime,
   createShowtime,
+  getAllMovieShowtimes,
   getAllShowtime,
   getDetailShowtime,
   getMovieHasShowtime,
@@ -12,6 +13,8 @@ import {
 const showtimeRoute = Router();
 showtimeRoute.post("/", createShowtime);
 showtimeRoute.get("/", getAllShowtime);
+showtimeRoute.get("/movie-showtime", getAllMovieShowtimes);
+
 showtimeRoute.get("/detail/:id", getDetailShowtime);
 showtimeRoute.get("/weekday", getShowtimesByWeekday);
 showtimeRoute.get("/movie", getMovieHasShowtime);

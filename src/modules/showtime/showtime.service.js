@@ -16,6 +16,7 @@ import Movie from "../movie/movie.model.js";
 import { createPagination } from "../../common/utils/create-pagination.js";
 import { SEAT_STATUS } from "../../common/constants/seat.status.js";
 import SeatStatus from "../seat-status/seat.status.model.js";
+import { populate } from "dotenv";
 
 export const createShowtimeService = async (payload) => {
   const { movieId, roomId, startTime } = payload;
@@ -40,12 +41,60 @@ export const createShowtimeService = async (payload) => {
   return showtime;
 };
 
-export const getAllShowtimeService = async (query) => {
+export const getAllShowtimeService = async (
+  query,
+  populateOptions = [
+    { path: "movieId", populate: "category" },
+    { path: "roomId" },
+  ],
+) => {
   const showtimes = await queryHelper(Showtime, query, {
-    populate: [{ path: "movieId" }, { path: "roomId" }],
-    populate: [{ path: "movieId", populate: "category" }, { path: "roomId" }],
+    populate: populateOptions,
   });
   return showtimes;
+};
+
+export const getAllMovieShowtimesService = async (query) => {
+  const { page = 1, limit = 10, pagination = true, ...otherQuery } = query;
+  const showtimes = await getAllShowtimeService(otherQuery);
+  const movieMap = {};
+  for (const st of showtimes.data) {
+    if (!st.movieId) continue;
+    const movieId = st.movieId._id?.toString?.() || st.movieId.toString();
+    const timeKey = dayjs.Dayjs(st.startTime).format("HH:mm");
+    if (!movieMap[movieId]) {
+      movieMap[movieId] = {
+        ...(st.movieId.toObject?.() ?? st.movieId),
+        showtimes: [],
+      };
+    }
+    const list = movieMap[movieId].showtimes;
+    const existIndex = list.findIndex((item) => {
+      const itemTime = dayjs(item.startTime).format("HH:mm");
+      return itemTime === timeKey;
+    });
+    if (existIndex !== -1) {
+      if (!list[existIndex].externalRoom) {
+        list[existIndex].externalRoom = [];
+      }
+      const roomExists = list[existIndex].externalRoom.some(
+        (room) => room?.id?.toString?.() === st.roomId?._id?.toString?.(),
+      );
+
+      if (!roomExists) {
+        list[existIndex].externalRoom.push(st.roomId);
+      }
+      continue;
+    }
+    list.push({
+      ...st.toObject(),
+      externalRoom: [st.roomId],
+    });
+  }
+  const result = Object.values(movieMap);
+  return pagination
+    ? createPagination(result, Number(page), Number(limit))
+    : result;
 };
 
 export const getShowtimesByWeekdayService = async (query) => {

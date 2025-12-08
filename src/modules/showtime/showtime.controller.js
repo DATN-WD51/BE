@@ -4,6 +4,7 @@ import createResponse from "../../common/utils/create-response.js";
 import {
   createManyShowtimeService,
   createShowtimeService,
+  getAllMovieShowtimesService,
   getAllShowtimeService,
   getDetailShowtimeService,
   getMovieHasShowtimeService,
@@ -27,6 +28,11 @@ export const getAllShowtime = handleAsync(async (req, res) => {
   const { query } = req;
   const showtimes = await getAllShowtimeService(query);
   return createResponse(res, 200, "OK", showtimes.data, showtimes.meta);
+});
+
+export const getAllMovieShowtimes = handleAsync(async (req, res) => {
+  const movies = await getAllMovieShowtimesService(req.query);
+  return createResponse(res, 200, "OK", movies.data, movies.meta);
 });
 
 export const getDetailShowtime = handleAsync(async (req, res) => {
