@@ -7,18 +7,20 @@ import {
   getDetailShowtime,
   getMovieHasShowtime,
   getShowtimesByWeekday,
+  getWeekdayHasShowtime,
   updateShowtime,
 } from "./showtime.controller.js";
 
 const showtimeRoute = Router();
-showtimeRoute.post("/", createShowtime);
-showtimeRoute.get("/", getAllShowtime);
-showtimeRoute.get("/movie-showtime", getAllMovieShowtimes);
 
+showtimeRoute.get("/", getAllShowtime);
 showtimeRoute.get("/detail/:id", getDetailShowtime);
-showtimeRoute.get("/weekday", getShowtimesByWeekday);
 showtimeRoute.get("/movie", getMovieHasShowtime);
-showtimeRoute.patch("/update/:id", updateShowtime);
+showtimeRoute.get("/movie-showtime", getAllMovieShowtimes);
+showtimeRoute.get("/weekday", getShowtimesByWeekday);
+showtimeRoute.get("/get-weekday", getWeekdayHasShowtime);
+showtimeRoute.post("/", createShowtime);
 showtimeRoute.post("/many", createManyShowtime);
+showtimeRoute.patch("/update/:id", updateShowtime);
 
 export default showtimeRoute;
