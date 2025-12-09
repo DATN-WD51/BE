@@ -25,7 +25,7 @@ export const calculatorEndTime = (durationMinute, startTime) => {
   return { endTime, dayOfWeek };
 };
 
-export const checkConflictShowime = async (
+export const checkConflictShowtime = async (
   roomId,
   startTime,
   endTime,
@@ -75,7 +75,7 @@ export const generateShowtime = async (
           .millisecond(0);
       }
       const { endTime } = calculatorEndTime(movie.duration, showtimeStart);
-      const conflict = await checkConflictShowime(
+      const conflict = await checkConflictShowtime(
         payload.roomId,
         showtimeStart.toDate(),
         endTime,
