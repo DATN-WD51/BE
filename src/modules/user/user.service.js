@@ -65,3 +65,11 @@ export const updateUserService = async (id, payload) => {
   Object.assign(user, payload);
   return await user.save();
 };
+
+export const createUserService = async (payload) => {
+  const checkMail = await User.findOne({ email: payload.email });
+  if (checkMail) throwError(400, "Người dùng đã tồn tại trong hệ thống!");
+  payload.password = await hashPassword("beestar@123");
+  const newUser = await User.create(...payload);
+  return newUser;
+};

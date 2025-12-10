@@ -2,6 +2,7 @@ import handleAsync from "../../common/utils/async-handler.js";
 import createResponse from "../../common/utils/create-response.js";
 import {
   changePasswordService,
+  createUserService,
   getAllUserService,
   getDetailUserService,
   getMyDetailTicketService,
@@ -59,4 +60,10 @@ export const updateUser = handleAsync(async (req, res) => {
   const payload = req.body;
   const updated = await updateUserService(id, payload);
   return createResponse(res, 200, "Cập nhật thành công", updated);
+});
+
+export const createUser = handleAsync(async (req, res) => {
+  const { body } = req;
+  const user = await createUserService(body);
+  return createResponse(res, 200, "Tạo người dùng thành công", user);
 });
