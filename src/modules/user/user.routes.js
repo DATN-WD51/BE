@@ -3,6 +3,7 @@ import {
   changePassword,
   getAllUser,
   getDetailMyTicket,
+  getDetailUser,
   getMyTicket,
   getProfile,
   updateProfile,
@@ -16,5 +17,6 @@ userRoute.patch("/change-password", changePassword);
 userRoute.get("/my-ticket", getMyTicket);
 userRoute.get("/my-ticket/detail/:ticketId", getDetailMyTicket);
 userRoute.get("/all", getAllUser);
+userRoute.get("/detail/:id", getDetailUser);
 
 export default userRoute;

@@ -53,3 +53,8 @@ export const getAllUserService = async (query) => {
   const users = await queryHelper(User, query);
   return users;
 };
+
+export const getDetailUserService = async (id) => {
+  const user = await User.findById(id);
+  return user;
+};
