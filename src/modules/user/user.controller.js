@@ -8,6 +8,7 @@ import {
   getMyticketService,
   getProfileService,
   updateProfileService,
+  updateUserService,
 } from "./user.service.js";
 
 export const getProfile = handleAsync(async (req, res) => {
@@ -51,4 +52,11 @@ export const getDetailUser = handleAsync(async (req, res) => {
   const { id } = req;
   const response = await getDetailUserService(id);
   return createResponse(res, 200, "OK", response);
+});
+
+export const updateUser = handleAsync(async (req, res) => {
+  const { id } = req.params;
+  const payload = req.body;
+  const updated = await updateUserService(id, payload);
+  return createResponse(res, 200, "Cập nhật thành công", updated);
 });

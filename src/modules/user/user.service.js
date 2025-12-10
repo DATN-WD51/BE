@@ -58,3 +58,10 @@ export const getDetailUserService = async (id) => {
   const user = await User.findById(id);
   return user;
 };
+
+export const updateUserService = async (id, payload) => {
+  const user = await User.findById(id);
+  if (!user) throwError(400, "Không tìm thấy người dùng này!");
+  Object.assign(user, payload);
+  return await user.save();
+};

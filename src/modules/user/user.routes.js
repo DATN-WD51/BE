@@ -7,6 +7,7 @@ import {
   getMyTicket,
   getProfile,
   updateProfile,
+  updateUser,
 } from "./user.controller.js";
 
 const userRoute = Router();
@@ -18,5 +19,6 @@ userRoute.get("/my-ticket", getMyTicket);
 userRoute.get("/my-ticket/detail/:ticketId", getDetailMyTicket);
 userRoute.get("/all", getAllUser);
 userRoute.get("/detail/:id", getDetailUser);
+userRoute.patch("/update-admin/:id", updateUser);
 
 export default userRoute;
