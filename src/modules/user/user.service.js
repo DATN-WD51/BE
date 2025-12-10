@@ -1,7 +1,19 @@
+import {
+  API_URL,
+  JWT_ACCESS_SECRET,
+  JWT_VERIFY_EXPIRED,
+} from "../../common/configs/environment.js";
 import { throwError } from "../../common/utils/create-response.js";
 import { queryHelper } from "../../common/utils/query-helper.js";
 import { AUTH_MESSAGES } from "../auth/auth.messages.js";
-import { comparePassword, hashPassword } from "../auth/auth.utils.js";
+import {
+  comparePassword,
+  generateToken,
+  hashPassword,
+} from "../auth/auth.utils.js";
+import { MAIL_MESSAGES } from "../mail/mail.messages.js";
+import { getVerifyTemplateMail } from "../mail/mail.template.js";
+import { sendMail } from "../mail/sendMail.js";
 import Ticket from "../ticket/ticket.model.js";
 import User from "./user.model.js";
 
@@ -77,6 +89,26 @@ export const createUserService = async (payload) => {
   const checkMail = await User.findOne({ email: payload.email });
   if (checkMail) throwError(400, "Người dùng đã tồn tại trong hệ thống!");
   payload.password = await hashPassword("beestar@123");
-  const newUser = await User.create(...payload);
-  return newUser;
+  const user = await User.create(...payload);
+  const payloadJwt = {
+    _id: user._id,
+    role: user.role,
+  };
+  const verifyToken = generateToken(
+    payloadJwt,
+    JWT_ACCESS_SECRET,
+    JWT_VERIFY_EXPIRED,
+  );
+  user.verityToken = verifyToken;
+  await user.save();
+  await sendMail(
+    payload.email,
+    MAIL_MESSAGES.VERIFY_SEND,
+    getVerifyTemplateMail({
+      email: payload.email,
+      link: `${API_URL}/auth/verify/${verifyToken}`,
+    }),
+  );
+  await user.save();
+  return user;
 };
