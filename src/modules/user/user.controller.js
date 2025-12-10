@@ -2,6 +2,7 @@ import handleAsync from "../../common/utils/async-handler.js";
 import createResponse from "../../common/utils/create-response.js";
 import {
   changePasswordService,
+  getAllUserService,
   getMyDetailTicketService,
   getMyticketService,
   getProfileService,
@@ -36,5 +37,11 @@ export const getDetailMyTicket = handleAsync(async (req, res) => {
   const { ticketId } = req.params;
   const { _id } = req.user;
   const response = await getMyDetailTicketService(ticketId, _id);
+  return createResponse(res, 200, "OK", response);
+});
+
+export const getAllUser = handleAsync(async (req, res) => {
+  const { query } = req;
+  const response = await getAllUserService(query);
   return createResponse(res, 200, "OK", response);
 });

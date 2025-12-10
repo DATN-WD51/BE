@@ -48,3 +48,8 @@ export const getMyDetailTicketService = async (userId, ticketId) => {
   const ticket = await Ticket.findOne({ userId, _id: ticketId });
   return ticket;
 };
+
+export const getAllUserService = async (query) => {
+  const users = await queryHelper(User, query);
+  return users;
+};

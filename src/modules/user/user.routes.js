@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   changePassword,
+  getAllUser,
   getDetailMyTicket,
   getMyTicket,
   getProfile,
@@ -14,5 +15,6 @@ userRoute.patch("/update", updateProfile);
 userRoute.patch("/change-password", changePassword);
 userRoute.get("/my-ticket", getMyTicket);
 userRoute.get("/my-ticket/detail/:ticketId", getDetailMyTicket);
+userRoute.get("/all", getAllUser);
 
 export default userRoute;
