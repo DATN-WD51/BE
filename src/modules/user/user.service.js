@@ -66,6 +66,13 @@ export const updateUserService = async (id, payload) => {
   return await user.save();
 };
 
+export const updateBlockUserService = async (id, payload) => {
+  const user = await User.findById(id);
+  if (!user) throwError(400, "Không tìm thấy người dùng!");
+  user.banned = payload;
+  return await user.save();
+};
+
 export const createUserService = async (payload) => {
   const checkMail = await User.findOne({ email: payload.email });
   if (checkMail) throwError(400, "Người dùng đã tồn tại trong hệ thống!");

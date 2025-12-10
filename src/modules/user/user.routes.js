@@ -6,6 +6,7 @@ import {
   getDetailUser,
   getMyTicket,
   getProfile,
+  updateBlockUser,
   updateProfile,
   updateUser,
 } from "./user.controller.js";
@@ -20,5 +21,6 @@ userRoute.get("/my-ticket/detail/:ticketId", getDetailMyTicket);
 userRoute.get("/all", getAllUser);
 userRoute.get("/detail/:id", getDetailUser);
 userRoute.patch("/update-admin/:id", updateUser);
+userRoute.patch("/banned/:id", updateBlockUser);
 
 export default userRoute;

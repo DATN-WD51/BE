@@ -8,6 +8,7 @@ import {
   getMyDetailTicketService,
   getMyticketService,
   getProfileService,
+  updateBlockUserService,
   updateProfileService,
   updateUserService,
 } from "./user.service.js";
@@ -60,6 +61,19 @@ export const updateUser = handleAsync(async (req, res) => {
   const payload = req.body;
   const updated = await updateUserService(id, payload);
   return createResponse(res, 200, "Cập nhật thành công", updated);
+});
+
+export const updateBlockUser = handleAsync(async (req, res) => {
+  const { body, params } = req;
+  const updated = await updateBlockUserService(params.id, body);
+  return createResponse(
+    res,
+    200,
+    updated.banned.isBanned
+      ? "Khoá người dùng thành công"
+      : "Mở khoá người dùng thành công",
+    updated,
+  );
 });
 
 export const createUser = handleAsync(async (req, res) => {
