@@ -29,6 +29,11 @@ const ticketItems = new mongoose.Schema(
 
 const ticketSchema = new mongoose.Schema(
   {
+    ticketId: {
+      type: String,
+      unique: true,
+      index: true,
+    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -43,6 +48,12 @@ const ticketSchema = new mongoose.Schema(
       type: String,
       enum: [...Object.values(TICKET_STATUS)],
       default: TICKET_STATUS.PENDING,
+    },
+    usedTime: {
+      type: String,
+      required: function () {
+        return this.status === TICKET_STATUS.CONFIRMED;
+      },
     },
     customerInfo: {
       type: {
@@ -101,6 +112,25 @@ const ticketSchema = new mongoose.Schema(
     versionKey: false,
   },
 );
+
+ticketSchema.pre("save", async function (next) {
+  if (this.ticketId) return next();
+  const generateId = () => {
+    const time = Date.now().toString(36).toUpperCase();
+    const random = crypto.randomBytes(2).toString("hex").toUpperCase();
+    return `BEE-${time}${random}`;
+  };
+  while (true) {
+    const id = generateId();
+    const exists = await this.constructor.exists({ ticketId: id });
+    if (!exists) {
+      this.ticketId = id;
+      break;
+    }
+  }
+  next();
+});
+
 const Ticket = mongoose.model("Ticket", ticketSchema);
 
 export default Ticket;
