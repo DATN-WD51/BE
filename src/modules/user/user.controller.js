@@ -47,7 +47,7 @@ export const getDetailMyTicket = handleAsync(async (req, res) => {
 export const getAllUser = handleAsync(async (req, res) => {
   const { query } = req;
   const response = await getAllUserService(query);
-  return createResponse(res, 200, "OK", response);
+  return createResponse(res, 200, "OK", response.data, response.meta);
 });
 
 export const getDetailUser = handleAsync(async (req, res) => {
