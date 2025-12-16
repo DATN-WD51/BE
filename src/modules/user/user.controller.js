@@ -40,7 +40,7 @@ export const getMyTicket = handleAsync(async (req, res) => {
 export const getDetailMyTicket = handleAsync(async (req, res) => {
   const { ticketId } = req.params;
   const { _id } = req.user;
-  const response = await getMyDetailTicketService(ticketId, _id);
+  const response = await getMyDetailTicketService(_id, ticketId);
   return createResponse(res, 200, "OK", response);
 });
 

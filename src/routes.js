@@ -15,14 +15,14 @@ import ticketRoute from "./modules/ticket/ticket.routes.js";
 const routes = Router();
 
 routes.use("/auth", authRoute);
+routes.use("/user", authenticate(JWT_ACCESS_SECRET), userRoute);
 routes.use("/movie", movieRoute);
 routes.use("/category", categoryRouter);
 routes.use("/room", roomRoute);
-routes.use("/user", authenticate(JWT_ACCESS_SECRET), userRoute);
 routes.use("/seat", seatRoute);
 routes.use("/showtime", showtimeRoute);
 routes.use("/seat-status", seatStatusRoute);
 routes.use("/check-out", checkoutRoute);
-routes.use("/check-ticket", ticketRoute);
+routes.use("/ticket", ticketRoute);
 
 export default routes;

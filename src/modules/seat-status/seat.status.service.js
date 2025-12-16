@@ -5,8 +5,11 @@ import Seat from "../seat/seat.model.js";
 import SeatStatus from "./seat.status.model.js";
 import Showtime from "../showtime/showtime.model.js";
 import { throwError } from "../../common/utils/create-response.js";
+import Room from "../room/room.model.js";
 
 export const getSeatShowtimeService = async (roomId, showtimeId, query) => {
+  const room = await Room.findById(roomId);
+  if (!room) throwError(400, "Không tìm thấy phòng chiếu");
   const seats = await Seat.find({ roomId, ...query }).lean();
   const seatSchedules = await SeatStatus.find({ showtimeId }).lean();
   const scheduleData = await Showtime.findById(showtimeId);
@@ -24,6 +27,7 @@ export const getSeatShowtimeService = async (roomId, showtimeId, query) => {
   const getCols = () => Math.max(...result.map((s) => s.col || 1));
   const getRows = () => Math.max(...result.map((s) => s.row || 1));
   return {
+    room,
     rows: getRows(),
     cols: getCols(),
     seats: result,

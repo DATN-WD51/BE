@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { TICKET_STATUS } from "../../common/constants/ticket.js";
+import crypto from "crypto";
 
 const ticketItems = new mongoose.Schema(
   {
@@ -57,7 +58,7 @@ const ticketSchema = new mongoose.Schema(
     },
     customerInfo: {
       type: {
-        phone: {
+        email: {
           type: String,
           required: true,
         },
@@ -65,13 +66,17 @@ const ticketSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
-        email: {
+        phone: {
           type: String,
           required: true,
         },
       },
     },
     movieId: {
+      type: String,
+      required: true,
+    },
+    movieName: {
       type: String,
       required: true,
     },
