@@ -18,6 +18,7 @@ const seatStatuSchema = new mongoose.Schema(
     row: { type: String, required: true },
     col: { type: Number, required: true },
     typeSeat: {
+      type: String,
       enum: ["NORMAL", "VIP", "COUPLE"],
       default: "NORMAL",
     },
