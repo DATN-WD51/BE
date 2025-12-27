@@ -18,6 +18,7 @@ import { sendMail } from "../mail/sendMail.js";
 import { MAIL_MESSAGES } from "../mail/mail.messages.js";
 import QRCode from "qrcode";
 import { getSendTicketTemplateMail } from "../mail/mail.template.js";
+import { TICKET_STATUS } from "../../common/constants/ticket.js";
 
 export const checkoutWithVnpayService = async (payload, userId) => {
   const seat = payload.items.map((item) => ({
@@ -62,6 +63,7 @@ export const checkoutReturnVnpay = async (query) => {
   await updateSeatsToBooked(ticket.userId, ticket.showtimeId, seat);
   await updateShowtimeStatus(ticket.showtimeId);
   ticket.isPaid = true;
+  ticket.status = TICKET_STATUS.PENDING;
   const qrBuffer = await QRCode.toBuffer(ticket.ticketId, {
     type: "png",
     width: 220,
