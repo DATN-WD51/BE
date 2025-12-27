@@ -48,7 +48,7 @@ const ticketSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: [...Object.values(TICKET_STATUS)],
-      default: TICKET_STATUS.PENDING,
+      default: TICKET_STATUS.PENDING_PAID,
     },
     usedTime: {
       type: String,
