@@ -44,13 +44,17 @@ export const toggleSeatService = async (payload, userId) => {
   });
   console.log(rowSeats);
   const existingCols = rowSeats.map((s) => s.col);
-  if (payload.col === 2 && !existingCols.includes(1) && !existingCols(3)) {
+  if (
+    payload.col === 2 &&
+    !existingCols.includes(1) &&
+    !existingCols.includes(3)
+  ) {
     throwError(400, "Vẫn còn ghế trống bên trái không thể mua ghế vừa chọn!");
   }
   if (
     payload.col === room.cols - 1 &&
-    !existingCols(room.cols) &&
-    !existingCols(room.cols - 2)
+    !existingCols.includes(room.cols) &&
+    !existingCols.includes(room.cols - 2)
   ) {
     throwError(400, "Vẫn còn ghế trống bên phải không thể mua ghế vừa chọn!");
   }
