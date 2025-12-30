@@ -64,7 +64,7 @@ export const getOverviewByMonthService = async (query) => {
       $group: {
         _id: {
           $dateToString: {
-            format: "%y-%m",
+            format: "%Y-%m",
             date: "$createdAt",
             timezone: "Asia/Ho_Chi_Minh",
           },
@@ -83,5 +83,6 @@ export const getOverviewByMonthService = async (query) => {
     },
     { $sort: { month: 1 } },
   ]);
+
   return raw;
 };
