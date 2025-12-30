@@ -3,6 +3,6 @@ import overviewStatsRoute from "./overview/overview.route.js";
 
 const statsRoute = Router();
 
-statsRoute.get("/overview", overviewStatsRoute);
+statsRoute.use("/overview", overviewStatsRoute);
 
 export default statsRoute;
