@@ -1,6 +1,6 @@
 import { TICKET_STATUS } from "../../../common/constants/ticket.js";
 import Ticket from "../../ticket/ticket.model.js";
-import { resolveCompareRanges } from "../stats.utils.js";
+import { normalizeQueryTime, resolveCompareRanges } from "../stats.utils.js";
 import {
   aggregateOverviewTicketStats,
   aggregateOverviewUserStats,
@@ -30,6 +30,8 @@ export const getOverviewStatsService = async (query) => {
       ...previous,
     }),
   ]);
+  const queryTimeCurrent = normalizeQueryTime(current);
+  const queryTimePrevious = normalizeQueryTime(previous);
 
   return {
     ticket: {
@@ -46,6 +48,10 @@ export const getOverviewStatsService = async (query) => {
       total: currentUser.totalUsers,
       previous: previousUser.totalUsers,
       growth: calcGrowth(currentUser.totalUsers, previousUser.totalUsers),
+    },
+    queryTime: {
+      current: queryTimeCurrent,
+      previous: queryTimePrevious,
     },
   };
 };
