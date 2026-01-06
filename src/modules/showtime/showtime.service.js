@@ -96,12 +96,19 @@ export const getShowtimesByWeekdayService = async (query) => {
   const {
     page = 1,
     limit = 10,
+    userApi = false,
     pagination = true,
     groupTime = false,
     ...otherQuery
   } = query;
-
-  const showtimes = await getAllShowtimeService(otherQuery);
+  let showtimes;
+  const showtimeRaw = await getAllShowtimeService(otherQuery);
+  if (userApi) {
+    showtimes = {
+      data: showtimeRaw.data.filter((item) => item.roomId.status),
+    };
+  }
+  if (!userApi) showtimes = showtimeRaw;
   const map = {};
   const showtimeIds = showtimes.data.map((st) => st._id);
 
