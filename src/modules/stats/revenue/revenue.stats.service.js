@@ -192,3 +192,41 @@ export const getRevenueTodayService = async () => {
     queryTime: { from, to },
   };
 };
+
+export const getRevenueByTicketTypeService = async (query) => {
+  const { current } = resolveCompareRanges(query?.createdAt || null);
+
+  const data = await Ticket.aggregate([
+    { $match: current },
+    {
+      $match: {
+        status: { $in: [TICKET_STATUS.PENDING, TICKET_STATUS.CONFIRMED] },
+      },
+    },
+    { $unwind: "$items" },
+    {
+      $group: {
+        _id: "$items.type",
+        revenue: { $sum: "$items.price" },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        type: "$_id",
+        revenue: 1,
+      },
+    },
+  ]);
+
+  const totalRevenue = data.reduce((s, i) => s + i.revenue, 0);
+
+  return {
+    totalRevenue,
+    data: data.map((i) => ({
+      ...i,
+      percentage: Number(((i.revenue / totalRevenue) * 100).toFixed(1)),
+    })),
+    queryTime: normalizeQueryTime(current),
+  };
+};

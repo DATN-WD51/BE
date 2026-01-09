@@ -3,6 +3,7 @@ import createResponse from "../../../common/utils/create-response.js";
 import { applyFilter } from "../../../common/utils/query-helper.js";
 import {
   getOverviewStatsRevenueService,
+  getRevenueByTicketTypeService,
   getRevenueHourlyTrendService,
   getRevenueTodayService,
 } from "./revenue.stats.service.js";
@@ -31,5 +32,16 @@ export const getRevenueHourlyTrend = handleAsync(async (req, res) => {
 
 export const getRevenueToday = handleAsync(async (_, res) => {
   const data = await getRevenueTodayService();
+  return createResponse(res, 200, "OK", data);
+});
+
+export const getRevenueByTicketType = handleAsync(async (req, res) => {
+  const match = {};
+
+  Object.entries(req.query).forEach(([key, value]) =>
+    applyFilter(key, value, match),
+  );
+
+  const data = await getRevenueByTicketTypeService(match);
   return createResponse(res, 200, "OK", data);
 });
