@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { TICKET_STATUS } from "../../../common/constants/ticket.js";
 import Ticket from "../../ticket/ticket.model.js";
 import { normalizeQueryTime, resolveCompareRanges } from "../stats.utils.js";
@@ -92,5 +93,102 @@ export const getOverviewStatsRevenueService = async (query) => {
     topRoom: res?.topRoom[0]?._id || null,
 
     queryTime: normalizeQueryTime(current),
+  };
+};
+
+export const getRevenueHourlyTrendService = async (query) => {
+  const { current } = resolveCompareRanges(query?.createdAt || null);
+
+  const data = await Ticket.aggregate([
+    { $match: current },
+    {
+      $match: {
+        status: { $in: [TICKET_STATUS.PENDING, TICKET_STATUS.CONFIRMED] },
+      },
+    },
+    {
+      $project: {
+        hour: {
+          $dateToString: { format: "%H:00", date: "$createdAt" },
+        },
+        totalPrice: 1,
+      },
+    },
+    {
+      $group: {
+        _id: "$hour",
+        revenue: { $sum: "$totalPrice" },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        hour: "$_id",
+        revenue: 1,
+      },
+    },
+    { $sort: { hour: 1 } },
+  ]);
+
+  const peak =
+    data.length > 0
+      ? data.reduce((max, cur) => (cur.revenue > max.revenue ? cur : max))
+      : null;
+
+  return {
+    data,
+    peakHour: peak,
+    queryTime: normalizeQueryTime(current),
+  };
+};
+
+export const getRevenueTodayService = async () => {
+  const from = dayjs().startOf("day").toDate();
+  const to = dayjs().endOf("day").add(1, "ms").toDate();
+
+  const rawData = await Ticket.aggregate([
+    {
+      $match: {
+        createdAt: { $gte: from, $lte: to },
+        status: { $in: [TICKET_STATUS.PENDING, TICKET_STATUS.CONFIRMED] },
+      },
+    },
+    {
+      $project: {
+        hour: {
+          $dateToString: { format: "%H:00", date: "$createdAt" },
+        },
+        totalPrice: 1,
+      },
+    },
+    {
+      $group: {
+        _id: "$hour",
+        revenue: { $sum: "$totalPrice" },
+      },
+    },
+  ]);
+
+  const hours = Array.from({ length: 24 }, (_, i) =>
+    dayjs().hour(i).format("HH:00"),
+  );
+
+  const data = hours.map((hour) => {
+    const found = rawData.find((i) => i._id === hour);
+    return {
+      hour,
+      revenue: found ? found.revenue : 0,
+    };
+  });
+
+  const peakHour =
+    data.length > 0
+      ? data.reduce((max, cur) => (cur.revenue > max.revenue ? cur : max))
+      : null;
+
+  return {
+    data,
+    peakHour,
+    queryTime: { from, to },
   };
 };
